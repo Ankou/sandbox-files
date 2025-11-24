@@ -1,13 +1,13 @@
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "sts:AssumeRole",
-      "Resource": [
-        "arn:aws:iam::843976229340:role/target-role"
-      ],
-      "Condition": {}
-    }
+      {
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "arn:aws:iam::157348165804:user/RickyAdmin"
+          },
+          "Action": "sts:AssumeRole",
+          "Condition": {}
+      }
   ]
 }

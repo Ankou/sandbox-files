@@ -86,7 +86,7 @@ JSON_STRING=$( jq -n \
 		subnetAPub: $subnetAPub,
 		subnetAPriv: $subnetAPriv,
 		subnetBPub: $subnetBPub,
-		subnetBPriv: $subnetBPub,
+		subnetBPriv: $subnetBPriv,
 		subnetCPub: $subnetCPub,
 		subnetCPriv: $subnetCPriv,
 		privRTA: $privRTA,

@@ -70,7 +70,26 @@ JSON_STRING=$( jq -n \
         --arg VPCA $VPCA \
         --arg VPCB $VPCB \
         --arg VPCC $VPCC \
-        '{VPCA: $VPCA, VPCB: $VPCB, VPCC: $VPCC}')
+	--arg subnetAPub   $subnetAPub  \
+	--arg subnetAPriv  $subnetAPriv \
+	--arg subnetBPub   $subnetBPub  \
+	--arg subnetBPriv  $subnetBPriv \
+	--arg subnetCPub   $subnetCPub  \
+	--arg subnetCPriv  $subnetCPriv \
+        '{VPCA: $VPCA, VPCB: $VPCB, VPCC: $VPCC,
+		subnetAPub: $subnetAPub,
+		subnetAPriv: $subnetAPriv,
+		subnetBPub: $subnetBPub,
+		subnetBPriv: $subnetBPub,
+		subnetCPub: $subnetCPub,
+		subnetCPriv: $subnetCPriv,
+		privRTA: $privRTA,
+		privRTB: $privRTB,
+		privRTC: $privRTC,
+		igwA: $igwA,
+		igwB: $igwB,
+		igwC: $igwC
+	'})
 
 echo $JSON_STRING > $resources
 

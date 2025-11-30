@@ -45,9 +45,9 @@ aws ec2 delete-route-table --route-table-id $privRTC
 
 # Detach Internet Gateway
 echo -e "\e[31mDetatching Internet Gateways\e[0m"
-aws ec2 detach-internet-gateway --internet-gateway-id $igwA
-aws ec2 detach-internet-gateway --internet-gateway-id $igwB
-aws ec2 detach-internet-gateway --internet-gateway-id $igwC
+aws ec2 detach-internet-gateway --internet-gateway-id $igwA --vpc-id $VPCA
+aws ec2 detach-internet-gateway --internet-gateway-id $igwB --vpc-id $VPCB
+aws ec2 detach-internet-gateway --internet-gateway-id $igwC --vpc-id $VPCC
 
 # Delete Internet Gateway
 echo -e "\e[31mDeleting Internet Gateways\e[0m"

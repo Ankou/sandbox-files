@@ -71,3 +71,9 @@ JSON_STRING=$( jq -n \
         --arg VPCB $VPCB \
         --arg VPCC $VPCC \
         '{VPCA: $VPCA, VPCB: $VPCB, VPCC: $VPCC}')
+
+echo $JSON_STRING > $resources
+
+#  End of script status
+greenText='\033[0;32m'
+NC='\033[0m' # No Color

@@ -76,12 +76,12 @@ JSON_STRING=$( jq -n \
 	--arg subnetBPriv  $subnetBPriv \
 	--arg subnetCPub   $subnetCPub  \
 	--arg subnetCPriv  $subnetCPriv \
-	--arg privRTA	   $privRTA /
-	--arg privRTB	   $privRTB /
-	--arg privRTC	   $privRTC /
-	--arg igwA	   $igwA /
-	--arg igwB	   $igwB /
-	--arg igwC	   $igwC /
+	--arg privRTA	   $privRTA \
+	--arg privRTB	   $privRTB \
+	--arg privRTC	   $privRTC \
+	--arg igwA	   $igwA \
+	--arg igwB	   $igwB \
+	--arg igwC	   $igwC \
         '{VPCA: $VPCA, VPCB: $VPCB, VPCC: $VPCC,
 		subnetAPub: $subnetAPub,
 		subnetAPriv: $subnetAPriv,

@@ -50,8 +50,8 @@ aws ec2 attach-internet-gateway --vpc-id $VPCC --internet-gateway-id "$igwC"
 
 # Find default route tables for each VPC 
 pubRTA=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCA'].RouteTableId" --output text)
-pubRTB=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCA'].RouteTableId" --output text)
-pubRTC=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCA'].RouteTableId" --output text)
+pubRTB=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCB'].RouteTableId" --output text)
+pubRTC=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCC'].RouteTableId" --output text)
 
 # Update Tags
 aws ec2 create-tags --resources $pubRTA --tags 'Key=Name,Value=Public route Table for VPC-A'

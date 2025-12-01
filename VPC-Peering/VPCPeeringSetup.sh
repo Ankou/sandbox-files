@@ -106,7 +106,7 @@ aws ec2 create-route --route-table-id "$pubRTC" --destination-cidr-block 0.0.0.0
 natGWaIP=$(aws ec2 allocate-address --query 'PublicIp' --output text)
 natGWbIP=$(aws ec2 allocate-address --query 'PublicIp' --output text)
 natGWcIP=$(aws ec2 allocate-address --query 'PublicIp' --output text)
-
+if [ $verbosity == "true" ]; then echo -e "Allocated Elastic IP addresses:"; fi
 
 # Determine allocation IP
 eipallocA=$( aws ec2 describe-addresses --query "Addresses[?PublicIp == '$natGWaIP'].AllocationId" --output text )
@@ -117,15 +117,16 @@ eipallocC=$( aws ec2 describe-addresses --query "Addresses[?PublicIp == '$natGWc
 natGWa=$(aws ec2 create-nat-gateway --subnet-id $subnetAPub --allocation-id $eipallocA --query NatGateway.NatGatewayId --output text)
 natGWb=$(aws ec2 create-nat-gateway --subnet-id $subnetBPub --allocation-id $eipallocB --query NatGateway.NatGatewayId --output text)
 natGWc=$(aws ec2 create-nat-gateway --subnet-id $subnetCPub --allocation-id $eipallocC --query NatGateway.NatGatewayId --output text)
+if [ $verbosity == "true" ]; then echo -e "Created NAT Gateways:"; fi
 
 echo sleeping for 40 seconds
 sleep 40
 
 # Create route in Private subnet to use NAT gateway
 aws ec2 create-route --route-table-id "$privRTA" --destination-cidr-block 0.0.0.0/0 --gateway-id "$natGWa" --query 'Return' --output text >/dev/null
-aws ec2 create-route --route-table-id "$privRTA" --destination-cidr-block 0.0.0.0/0 --gateway-id "$natGWa" --query 'Return' --output text >/dev/null
-aws ec2 create-route --route-table-id "$privRTA" --destination-cidr-block 0.0.0.0/0 --gateway-id "$natGWa" --query 'Return' --output text >/dev/null
-
+aws ec2 create-route --route-table-id "$privRTB" --destination-cidr-block 0.0.0.0/0 --gateway-id "$natGWa" --query 'Return' --output text >/dev/null
+aws ec2 create-route --route-table-id "$privRTC" --destination-cidr-block 0.0.0.0/0 --gateway-id "$natGWa" --query 'Return' --output text >/dev/null
+if [ $verbosity == "true" ]; then echo -e "Added routes in Private Subnets towards NAT GW:"; fi
 
 
 
@@ -186,21 +187,21 @@ if [ $verbosity == "true" ]; then echo -e "Created EC2 Instances:"; fi
 curl https://raw.githubusercontent.com/Ankou/sandbox-files/refs/heads/main/VPC-Peering/ec2SSMAccessTrustPolicy.json > ~/ec2SSMAccessTrustPolicy.json 
 
 # Create the role
-aws iam create-role --role-name ec2SSMAccessRole --assume-role-policy-document file://~/ec2SSMAccessTrustPolicy.json
+aws iam create-role --role-name ec2SSMAccessRole --assume-role-policy-document file://~/ec2SSMAccessTrustPolicy.json > /dev/null
 
 # Attach aws managed policy to the role.
 aws iam attach-role-policy --role-name ec2SSMAccessRole --policy-arn arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
 
 # Create an Instance Profile
-aws iam create-instance-profile --instance-profile-name ec2InstanceProfile
+aws iam create-instance-profile --instance-profile-name ec2InstanceProfile > /dev/null
 
 # Add the role to the instance profile
 aws iam add-role-to-instance-profile --instance-profile-name ec2InstanceProfile --role-name ec2SSMAccessRole
 
 # Associate the instance profile with an EC2 Instance
-aws ec2 associate-iam-instance-profile --instance-id ec2a_ID --iam-instance-profile Name=ec2InstanceProfile
-aws ec2 associate-iam-instance-profile --instance-id ec2b_ID --iam-instance-profile Name=ec2InstanceProfile
-aws ec2 associate-iam-instance-profile --instance-id ec2c_ID --iam-instance-profile Name=ec2InstanceProfile
+aws ec2 associate-iam-instance-profile --instance-id $ec2a_ID --iam-instance-profile Name=ec2InstanceProfile
+aws ec2 associate-iam-instance-profile --instance-id $ec2b_ID --iam-instance-profile Name=ec2InstanceProfile
+aws ec2 associate-iam-instance-profile --instance-id $ec2c_ID --iam-instance-profile Name=ec2InstanceProfile
 
 
 

@@ -82,7 +82,7 @@ aws ec2 associate-route-table --subnet-id $subnetCPriv --route-table-id $privRTC
 aws ec2 associate-route-table --subnet-id $subnetAPub --route-table-id $pubRTA --query 'AssociationState.State' --output text > /dev/null 2>&1
 aws ec2 associate-route-table --subnet-id $subnetBPub --route-table-id $pubRTB --query 'AssociationState.State' --output text > /dev/null 2>&1
 aws ec2 associate-route-table --subnet-id $subnetCPub --route-table-id $pubRTC --query 'AssociationState.State' --output text > /dev/null 2>&1
-if [ $verbosity == "true" ]; then echo -e "Associated route tables to subnets:"
+if [ $verbosity == "true" ]; then echo -e "Associated route tables to subnets:"; fi
 
 # Create Internet gateway for each VPC
 igwA=$(aws ec2 create-internet-gateway --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=VPC-A-igw}]' --query InternetGateway.InternetGatewayId --output text)

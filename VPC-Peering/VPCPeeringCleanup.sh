@@ -85,10 +85,19 @@ aws ec2 delete-internet-gateway --internet-gateway-id $igwA
 aws ec2 delete-internet-gateway --internet-gateway-id $igwB
 aws ec2 delete-internet-gateway --internet-gateway-id $igwC
 
+# Delete NAT gateway
+#echo -e "\e[31mDeleting NAT gateway\e[0m"
+#aws ec2 delete-nat-gateway --nat-gateway-id $natGateway > /dev/null 2>&1
+
 # Delete VPC
 echo -e "\e[31mDeleting Subnets\e[0m"
 aws ec2 delete-vpc --vpc-id $VPCA
 aws ec2 delete-vpc --vpc-id $VPCB
 aws ec2 delete-vpc --vpc-id $VPCC
 
+# Delete key-pair
+aws ec2 delete-key-pair --key-name sandbox-key-pair > /dev/null 2>&1
 
+# Cleanup files
+rm -f ~/.ssh/sandbox-key-pair.pem
+rm -f ~/resources.json

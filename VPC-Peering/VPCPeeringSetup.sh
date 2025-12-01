@@ -154,6 +154,15 @@ if [ $verbosity == "true" ]; then echo -e "Created EC2 Instances:"; fi
 
 
 
+# Create IAM role to allow EC2 instances to connect to SSM
+# Apply AWS Managed permissions policy arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore 
+
+
+# Apply the role to the EC2 instances
+
+
+# Create NAT gateway for private EC2 instances to reach SSM (Or create the SSM interface gateways)
+
 
 
 

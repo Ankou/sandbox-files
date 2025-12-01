@@ -27,6 +27,36 @@ privRTC=$( jq -r .privRTC $resources )
 igwA=$( jq -r .igwA $resources )
 igwB=$( jq -r .igwB $resources )
 igwC=$( jq -r .igwC $resources )
+EC2a_sg=$( jq -r .EC2a_sg $resources )
+EC2b_sg=$( jq -r .EC2b_sg $resources )
+EC2c_sg=$( jq -r .EC2c_sg $resources )
+ec2a_ID=$( jq -r .EC2a_ID $resources )
+ec2b_ID=$( jq -r .EC2b_ID $resources )
+ec2c_ID=$( jq -r .EC2c_ID $resources )
+
+
+# Delete EC2 instances
+echo -e "\e[31mDeleting EC2 Instances\e[0m"
+aws ec2 terminate-instances --instance-ids $ec2a_ID
+aws ec2 terminate-instances --instance-ids $ec2b_ID
+aws ec2 terminate-instances --instance-ids $ec2c_ID
+
+ec2status=$( aws ec2 describe-instances --instance-ids $ec2c_ID --query 'Reservations[].Instances[].State.Name' --output text  )
+
+while [ $ec2status != "terminated" ]
+do
+  echo Status: $ec2status trying again in 10 seconds
+  ec2status=$( aws ec2 describe-instances --instance-ids $ec2c_ID --query 'Reservations[].Instances[].State.Name' --output text  )
+  sleep 10
+done
+
+
+
+# Delete Security Group
+echo -e "\e[31mDeleting Security Groups\e[0m"
+aws ec2 delete-security-group --group-id $EC2a_sg
+aws ec2 delete-security-group --group-id $EC2b_sg
+aws ec2 delete-security-group --group-id $EC2c_sg
 
 # Delete Subnets
 echo -e "\e[31mDeleting Subnets\e[0m"

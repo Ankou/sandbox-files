@@ -31,6 +31,18 @@ subnetCPub=$(aws ec2 create-subnet --vpc-id $VPCC --cidr-block 172.18.0.0/24 --t
 subnetCPriv=$(aws ec2 create-subnet --vpc-id $VPCC --cidr-block 172.18.1.0/24 --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=VPC-C Private}]' --availability-zone us-east-1a --query Subnet.SubnetId --output text)
 read -p "Created subnetss:  Press Enter to continue..."
 
+# Find default route tables for each VPC
+pubRTA=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCA'].RouteTableId" --output text)
+pubRTB=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCB'].RouteTableId" --output text)
+pubRTC=$(aws ec2 describe-route-tables --query "RouteTables[?VpcId == '$VPCC'].RouteTableId" --output text)
+read -p "Determined VPC default route tables:  Press Enter to continue..."
+
+# Update Tags
+aws ec2 create-tags --resources $pubRTA --tags 'Key=Name,Value=Public route Table for VPC-A'
+aws ec2 create-tags --resources $pubRTB --tags 'Key=Name,Value=Public route Table for VPC-B'
+aws ec2 create-tags --resources $pubRTC --tags 'Key=Name,Value=Public route Table for VPC-C'
+read -p "Updated public route table names:  Press Enter to continue..."
+
 # Create private route table all VPCs
 privRTA=$(aws ec2 create-route-table --vpc-id $VPCA --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=Private Route Table for VPC-A}]' --query RouteTable.RouteTableId --output text)
 privRTB=$(aws ec2 create-route-table --vpc-id $VPCB --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=Private Route Table for VPC-B}]' --query RouteTable.RouteTableId --output text)

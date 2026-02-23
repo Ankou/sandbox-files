@@ -29,4 +29,27 @@ done
 if [ $verbosity == "true" ]; then echo -e "verbosity is $verbosity"; fi
 
 
+#################################
+#                               #
+#       VPC Configuration       #
+#                               #
+#################################
+
+# Create VPCs
+VPCA=$(aws ec2 create-vpc --cidr-block 172.16.0.0/16 --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=SandboxVPC-A}]' --query Vpc.VpcId --output text)
+if [ $verbosity == "true" ]; then echo -e "Created VPC:"; fi
+
+# Create Subnet
+subnetAPub=$(aws ec2 create-subnet --vpc-id $VPCA --cidr-block 172.16.0.0/24 --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=VPC-A Public}]' --availability-zone us-east-1a --query Subnet.SubnetId --output text)
+if [ $verbosity == "true" ]; then echo -e "Created subnet:"; fi
+
+resources=~/resources.json
+JSON_STRING=$( jq -n \
+    --arg VPCA $VPCA \
+    --arg subnetAPub $subnetAPub \
+	'{
+	    VPCA: $VPCA, subnetAPub: $subnetAPub
+	'})
+
+echo $JSON_STRING > $resources
 
